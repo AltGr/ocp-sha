@@ -38,10 +38,10 @@ define run-test
 	  ref=`time -f "openssl: %es" openssl sha$(1) $$t |cut -d' ' -f2`; \
 	  res=`time -f "ocp-sha: %es" ./ocp-sha $(1) $$t`; \
 	  if [ "$$ref" != "$$res" ]; then \
-	    echo "FAIL SHA$(1) $$t\n    $$res, should be\n    $$ref"; \
-	    exit 1; \
+	    echo "[31mFAIL[m SHA$(1) $$t\n    $$res, should be\n    $$ref"; \
+	    : exit 1; \
 	  else \
-	    echo "PASS SHA$(1) $$t"; \
+	    echo "[32mPASS[m SHA$(1) $$t"; \
 	  fi; \
 	done
 endef

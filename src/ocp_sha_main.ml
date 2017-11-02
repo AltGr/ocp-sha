@@ -12,5 +12,5 @@ let () =
     | _ -> usage ()
   in
   for i = 2 to Array.length Sys.argv - 1 do
-    print_endline (SHA.hash algo Sys.argv.(i))
+    print_endline (SHA.hash_file algo Sys.argv.(i))
   done
