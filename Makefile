@@ -8,7 +8,7 @@ ocp-sha.cma: src/SHA.mli src/SHA.ml
 	ocamlc -I src -a $^ -o $@
 
 ocp-sha: ocp-sha.cmxa src/ocp_sha_main.ml
-	ocamlopt -I src unix.cmxa bigarray.cmxa $^ -o $@
+	ocamlopt -I src unix.cmxa $^ -o $@
 
 test-init:
 	rm -rf test
