@@ -105,7 +105,10 @@ module Input_file(Buf: BufSig with type t = bigstring) = struct
 
   let init ~blocksize src =
     let fd = Unix.openfile src [Unix.O_RDONLY] 0 in
-    let contents = B.(Array1.map_file fd B.char c_layout false (-1)) in
+    let contents = [|-1|]
+      |> Unix.map_file fd B.char B.c_layout false
+      |> B.array1_of_genarray
+    in
     { fd; blocksize; contents }
 
   let close {fd; _} = Unix.close fd
@@ -138,7 +141,7 @@ module Input_file(Buf: BufSig with type t = bigstring) = struct
 
 end
 
-module Input_string(Buf: BufSig with type t = string) = struct
+module Input_string(Buf: BufSig with type t = bytes) = struct
 
   type src = Bytes.t
 
@@ -159,10 +162,10 @@ module Input_string(Buf: BufSig with type t = string) = struct
 
   let close _ = ()
 
-  let byte_size {contents; _} = String.length contents
+  let byte_size {contents; _} = Bytes.length contents
 
   let get_chunk {blocksize; contents} i =
-    let len = String.length contents in
+    let len = Bytes.length contents in
     let block_bytes = blocksize * Buf.Conv.bytes in
     if (i + 1) * block_bytes <= len then
       { offset = i * block_bytes; b = contents }
